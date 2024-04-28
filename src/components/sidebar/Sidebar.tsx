@@ -29,7 +29,7 @@ const { Title } = Typography;
 const Sidebar: React.FC = () => {
   return (
     <Sider trigger={null} collapsible>
-      <Title level={5} className="text-white logo">
+      <Title level={5} className="!text-white p-4">
         File Drive
       </Title>
       <Menu

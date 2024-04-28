@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, theme, ConfigProvider } from 'antd';
+import { Layout, theme, ConfigProvider, Breadcrumb } from 'antd';
 import Sidebar from '@components/sidebar/Sidebar';
 import Navbar from '@components/navbar/Navbar';
 
@@ -24,14 +24,28 @@ const App: React.FC = () => {
           <Header style={{ padding: 0, background: colorBgContainer }}>
             <Navbar />
           </Header>
+          <Breadcrumb
+            items={[
+              {
+                title: 'Home',
+              },
+              {
+                title: 'Application Center',
+                href: '',
+              },
+              {
+                title: 'Application List',
+                href: '',
+              },
+              {
+                title: 'An Application',
+              },
+            ]}
+            className="m-4"
+          />
           <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
+            className="mx-4 bg-white p-4"
+            style={{ borderRadius: borderRadiusLG }}
           >
             Content
           </Content>
