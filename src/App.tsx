@@ -1,6 +1,8 @@
 import React from 'react';
-import { Breadcrumb, Layout, theme } from 'antd';
+import { Layout, theme } from 'antd';
 import Sidebar from '@components/sidebar/Sidebar';
+import Navbar from '@components/navbar/Navbar';
+
 const { Header, Content } = Layout;
 
 const App: React.FC = () => {
@@ -9,23 +11,22 @@ const App: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ height: '100%' }}>
+      <Sidebar />
       <Layout>
-        <Sidebar />
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          ></div>
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Navbar />
+        </Header>
+        <Content
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          Content
         </Content>
       </Layout>
     </Layout>
