@@ -1,35 +1,58 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import React from 'react';
+import { Layout, theme, ConfigProvider, Breadcrumb } from 'antd';
+import Sidebar from '@components/sidebar/Sidebar';
+import Navbar from '@components/navbar/Navbar';
 
-function App() {
-  const [count, setCount] = useState(0);
+const { Header, Content } = Layout;
+
+const App: React.FC = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ConfigProvider
+      theme={{
+        token: {
+          borderRadius: 10,
+        },
+      }}
+    >
+      <Layout style={{ height: '100%' }}>
+        <Sidebar />
+        <Layout>
+          <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Navbar />
+          </Header>
+          <Breadcrumb
+            items={[
+              {
+                title: 'Home',
+              },
+              {
+                title: 'Application Center',
+                href: '',
+              },
+              {
+                title: 'Application List',
+                href: '',
+              },
+              {
+                title: 'An Application',
+              },
+            ]}
+            className="m-4"
+          />
+          <Content
+            className="mx-4 bg-white p-4"
+            style={{ borderRadius: borderRadiusLG }}
+          >
+            Content
+          </Content>
+        </Layout>
+      </Layout>
+    </ConfigProvider>
   );
-}
+};
 
 export default App;
