@@ -1,11 +1,26 @@
 import { Dropdown, Flex, MenuProps } from 'antd';
 import React from 'react';
 import { Avatar, Button } from 'antd';
-import { PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid';
 const items: MenuProps['items'] = [
   {
     key: '1',
     label: 'Account',
+  },
+];
+
+const addNewItems: MenuProps['items'] = [
+  {
+    key: 'newFolder',
+    label: (
+      <div className="flex flex-center">
+        <FolderPlusIcon width={18} /> New Folder
+      </div>
+    ),
+  },
+  {
+    key: 'newFile',
+    label: 'New File',
   },
 ];
 
@@ -18,13 +33,16 @@ const Navbar: React.FC = () => {
       style={{ padding: '0 16px', height: '100%' }}
       gap={2}
     >
-      <Button
-        type="primary"
-        icon={<PlusIcon fill="white" width={12} />}
-        size={'middle'}
-      >
-        Add
-      </Button>
+      <Dropdown menu={{ items: addNewItems }}>
+        <Button
+          type="primary"
+          icon={<PlusIcon fill="white" width={16} />}
+          size={'large'}
+          className="flex flex-center"
+        >
+          Add
+        </Button>
+      </Dropdown>
 
       <Dropdown menu={{ items }} placement="bottomLeft">
         <Avatar
