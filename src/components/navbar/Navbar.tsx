@@ -1,36 +1,8 @@
-import { Dropdown, Flex, MenuProps } from 'antd';
+import { Flex } from 'antd';
 import React from 'react';
-import { Avatar, Button } from 'antd';
-import {
-  PlusIcon,
-  FolderPlusIcon,
-  DocumentPlusIcon,
-} from '@heroicons/react/24/outline';
-const items: MenuProps['items'] = [
-  {
-    key: '1',
-    label: 'Account',
-  },
-];
-
-const addNewItems: MenuProps['items'] = [
-  {
-    key: 'newFolder',
-    label: (
-      <div className="flex items-center gap-2">
-        <FolderPlusIcon width={18} /> New Folder
-      </div>
-    ),
-  },
-  {
-    key: 'newFile',
-    label: (
-      <div className="flex items-center gap-2">
-        <DocumentPlusIcon width={18} /> New File
-      </div>
-    ),
-  },
-];
+import AvatarDropdown from '../profile/AvatarDropdown';
+import MetamarkUIButton from '../metmask/MetamarkUIButton';
+import CreateNewButton from '../file/CreateNewButton';
 
 const Navbar: React.FC = () => {
   return (
@@ -40,26 +12,11 @@ const Navbar: React.FC = () => {
       justify="space-between"
       gap={2}
     >
-      <Dropdown menu={{ items: addNewItems }}>
-        <Button
-          type="primary"
-          icon={<PlusIcon fill="white" width={16} />}
-          size={'large'}
-          className="flex items-center"
-        >
-          Add
-        </Button>
-      </Dropdown>
-
-      <Dropdown menu={{ items }} placement="bottomLeft">
-        <Avatar
-          style={{ backgroundColor: '', verticalAlign: 'middle' }}
-          size="large"
-          className="hover:cursor-pointer"
-        >
-          P
-        </Avatar>
-      </Dropdown>
+      <CreateNewButton />
+      <div className="flex items-center gap-1">
+        <MetamarkUIButton />
+        <AvatarDropdown />
+      </div>
     </Flex>
   );
 };

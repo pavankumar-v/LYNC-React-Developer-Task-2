@@ -1,15 +1,55 @@
 import React from 'react';
-import { Layout, theme, ConfigProvider, Breadcrumb } from 'antd';
-import Sidebar from '@components/sidebar/Sidebar';
-import Navbar from '@components/navbar/Navbar';
+import { ConfigProvider } from 'antd';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
+import MetamaskAuth from './components/pages/MetamaskAuth';
+import Dashboard from './components/pages/Dashboard';
+import { useSDK } from '@metamask/sdk-react-ui';
+import PageLoading from './components/pages/PageLoading';
 
-const { Header, Content } = Layout;
+const Authenticate: React.FC<{
+  children: JSX.Element | JSX.Element[];
+}> = ({ children }) => {
+  const { connected, account, connecting, ready } = useSDK();
+
+  if (!ready) {
+    return <PageLoading />;
+  }
+
+  if (connecting) {
+    return <PageLoading />;
+  }
+
+  if (!connected) {
+    return <Navigate to="/auth/metamask" />;
+  }
+
+  if (!account) {
+    return <Navigate to="/auth/metamask" />;
+  }
+
+  return children;
+};
+
+const router = createBrowserRouter([
+  {
+    path: '/auth/metamask',
+    element: <MetamaskAuth />,
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <Authenticate>
+        <Dashboard />
+      </Authenticate>
+    ),
+  },
+]);
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   return (
     <ConfigProvider
       theme={{
@@ -18,39 +58,7 @@ const App: React.FC = () => {
         },
       }}
     >
-      <Layout style={{ height: '100%' }}>
-        <Sidebar />
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Navbar />
-          </Header>
-          <Breadcrumb
-            items={[
-              {
-                title: 'Home',
-              },
-              {
-                title: 'Application Center',
-                href: '',
-              },
-              {
-                title: 'Application List',
-                href: '',
-              },
-              {
-                title: 'An Application',
-              },
-            ]}
-            className="m-4"
-          />
-          <Content
-            className="mx-4 bg-white p-4"
-            style={{ borderRadius: borderRadiusLG }}
-          >
-            Content
-          </Content>
-        </Layout>
-      </Layout>
+      <RouterProvider router={router}></RouterProvider>
     </ConfigProvider>
   );
 };
