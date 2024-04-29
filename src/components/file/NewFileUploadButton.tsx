@@ -13,28 +13,23 @@ import {
   message,
 } from 'antd';
 import useModal from '@/hooks/useModal';
+import { fileUpload } from '@/services/fileUpload';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const NewFileUploadButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [file, setFile] = useState<UploadFile | null>();
   const [uploading, setUploading] = useState(false);
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file as FileType);
-    });
+    formData.append('file', file as FileType);
     setUploading(true);
-    // You can use any AJAX library you like
-    fetch('https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((res) => res.json())
+
+    fileUpload(formData)
       .then(() => {
-        setFileList([]);
+        setFile(null);
         message.success('upload successfully.');
       })
       .catch(() => {
@@ -46,18 +41,15 @@ const NewFileUploadButton: React.FC = () => {
   };
 
   const props: UploadProps = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
+    onRemove: () => {
+      setFile(null);
     },
     beforeUpload: (file) => {
-      setFileList([...fileList, file]);
+      console.log(file);
+      setFile(file);
 
       return false;
     },
-    fileList,
   };
 
   return (
@@ -75,7 +67,7 @@ const NewFileUploadButton: React.FC = () => {
           <Button
             type="primary"
             onClick={handleUpload}
-            disabled={fileList.length === 0}
+            disabled={file == null}
             loading={uploading}
             style={{ marginTop: 16 }}
             key="uploadBtn"
