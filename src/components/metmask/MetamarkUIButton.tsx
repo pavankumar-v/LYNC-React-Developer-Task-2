@@ -1,27 +1,22 @@
 import React from 'react';
-import { Button } from 'antd';
-import { useSDK } from '@metamask/sdk-react';
+import { Spin } from 'antd';
+import { MetaMaskButton, useSDK } from '@metamask/sdk-react-ui';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const MetamarkUIButton: React.FC = () => {
-  const { sdk, connected, connecting, account } = useSDK();
+  const { connected, connecting, account } = useSDK();
 
-  const connect = async () => {
-    try {
-      await sdk?.connect();
-    } catch (err) {
-      console.warn('failed to connect..', err);
-    }
-  };
+  if (connecting) {
+    return (
+      <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
+    );
+  }
 
-  if (connected) {
+  if (connected && account) {
     return <div>{account && `${account}`}</div>;
   }
 
-  return (
-    <Button type="primary" onClick={connect} loading={connecting}>
-      Connect
-    </Button>
-  );
+  return <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>;
 };
 
 export default MetamarkUIButton;
