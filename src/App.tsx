@@ -1,15 +1,21 @@
 import React from 'react';
-import { Layout, theme, ConfigProvider, Breadcrumb } from 'antd';
-import Sidebar from '@components/sidebar/Sidebar';
-import Navbar from '@components/navbar/Navbar';
+import { ConfigProvider } from 'antd';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import MetamaskAuth from './components/pages/MetamaskAuth';
+import Dashboard from './components/pages/Dashboard';
 
-const { Header, Content } = Layout;
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MetamaskAuth />,
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+  },
+]);
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   return (
     <ConfigProvider
       theme={{
@@ -18,39 +24,7 @@ const App: React.FC = () => {
         },
       }}
     >
-      <Layout style={{ height: '100%' }}>
-        <Sidebar />
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Navbar />
-          </Header>
-          <Breadcrumb
-            items={[
-              {
-                title: 'Home',
-              },
-              {
-                title: 'Application Center',
-                href: '',
-              },
-              {
-                title: 'Application List',
-                href: '',
-              },
-              {
-                title: 'An Application',
-              },
-            ]}
-            className="m-4"
-          />
-          <Content
-            className="mx-4 bg-white p-4"
-            style={{ borderRadius: borderRadiusLG }}
-          >
-            Content
-          </Content>
-        </Layout>
-      </Layout>
+      <RouterProvider router={router}></RouterProvider>
     </ConfigProvider>
   );
 };
