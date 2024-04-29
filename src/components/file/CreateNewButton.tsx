@@ -1,27 +1,17 @@
-import {
-  DocumentPlusIcon,
-  FolderPlusIcon,
-  PlusIcon,
-} from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { Dropdown, Button, MenuProps } from 'antd';
 import React from 'react';
+import NewFolder from './NewFolderButton';
+import NewFileUploadButton from './NewFileUploadButton';
 
 const items: MenuProps['items'] = [
   {
     key: 'newFolder',
-    label: (
-      <div className="flex items-center gap-2">
-        <FolderPlusIcon width={18} /> New Folder
-      </div>
-    ),
+    label: <NewFolder />,
   },
   {
     key: 'newFile',
-    label: (
-      <div className="flex items-center gap-2">
-        <DocumentPlusIcon width={18} /> New File
-      </div>
-    ),
+    label: <NewFileUploadButton />,
   },
 ];
 
