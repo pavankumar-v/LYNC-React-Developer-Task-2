@@ -1,7 +1,7 @@
 import { FileDrive, Folder } from '@/lib/interface';
 import { getFiles, setFiles } from '@/services/fileDrive';
 import { useSDK } from '@metamask/sdk-react-ui';
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer, useState } from 'react';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -51,6 +51,8 @@ export const initalState: FileDrive = {
 export type FileDriveContextType = {
   fileDrive: FileDrive;
   fileDriveDispatch: React.Dispatch<FileDriveAction>;
+  currentFolderId: string;
+  setCurrentFolder: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const FileDriveContext = createContext<FileDriveContextType | null>(
@@ -62,6 +64,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
     fileDriveReducer,
     initalState
   );
+  const [currentFolderId, setCurrentFolder] = useState<string>('ROOT');
 
   const { account = '' } = useSDK();
 
@@ -85,7 +88,14 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
   }
 
   return (
-    <FileDriveContext.Provider value={{ fileDrive, fileDriveDispatch }}>
+    <FileDriveContext.Provider
+      value={{
+        fileDrive,
+        fileDriveDispatch,
+        currentFolderId,
+        setCurrentFolder,
+      }}
+    >
       {children}
     </FileDriveContext.Provider>
   );

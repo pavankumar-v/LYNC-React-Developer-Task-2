@@ -10,9 +10,11 @@ import {
 import { nanoid } from 'nanoid';
 import { Folder } from '@/lib/interface';
 import { useSDK } from '@metamask/sdk-react-ui';
+import { useParams } from 'react-router-dom';
 
 const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
+  const { folderId } = useParams();
   const { account = '' } = useSDK();
   const { fileDriveDispatch } = useContext(
     FileDriveContext
@@ -23,6 +25,7 @@ const NewFolderButton: React.FC = () => {
       id: nanoid(),
       folderName: values.folderName,
       createdAt: new Date(),
+      parentFolderID: folderId || 'ROOT',
       files: [],
     };
 

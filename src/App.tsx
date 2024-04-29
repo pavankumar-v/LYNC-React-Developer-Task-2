@@ -48,6 +48,14 @@ const router = createBrowserRouter([
       </Authenticate>
     ),
   },
+  {
+    path: '/dashboard/:folderId',
+    element: (
+      <Authenticate>
+        <Dashboard />
+      </Authenticate>
+    ),
+  },
 ]);
 
 const App: React.FC = () => {
