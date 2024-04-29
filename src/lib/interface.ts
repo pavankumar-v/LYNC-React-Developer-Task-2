@@ -1,6 +1,6 @@
-export interface FileSystem {
+export interface FileDrive {
   id: string;
-  dirs: Folder;
+  dirs: Folder[];
   files: File[];
 }
 

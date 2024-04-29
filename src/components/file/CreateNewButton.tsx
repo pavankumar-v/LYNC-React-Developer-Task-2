@@ -1,8 +1,8 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Dropdown, Button, MenuProps } from 'antd';
 import React from 'react';
-import NewFolder from './NewFolderButton';
-import NewFileUploadButton from './NewFileUploadButton';
+import NewFolder from '@components/file/NewFolderButton';
+import NewFileUploadButton from '@components/file/NewFileUploadButton';
 
 const items: MenuProps['items'] = [
   {

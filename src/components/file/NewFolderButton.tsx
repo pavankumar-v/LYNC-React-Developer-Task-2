@@ -1,10 +1,31 @@
-import React from 'react';
-import { Modal } from 'antd';
+import React, { useContext } from 'react';
+import { Button, Form, Input, Modal } from 'antd';
 import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import useModal from '@/hooks/useModal';
+import {
+  FileDriveContext,
+  FileDriveContextType,
+} from '@/contexts/FileDriveProvider';
+
+import { nanoid } from 'nanoid';
+import { Folder } from '@/lib/interface';
 
 const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
+  const { fileDriveDispatch } = useContext(
+    FileDriveContext
+  ) as FileDriveContextType;
+
+  function handleOnSubmit(values: { folderName: string }) {
+    const folder: Folder = {
+      id: nanoid(),
+      folderName: values.folderName,
+      createdAt: new Date(),
+      files: [],
+    };
+
+    fileDriveDispatch({ type: 'createFoler', payload: { folder } });
+  }
 
   return (
     <>
@@ -12,14 +33,33 @@ const NewFolderButton: React.FC = () => {
         <FolderPlusIcon width={18} /> New Folder
       </div>
       <Modal
-        title="Basic Modal"
+        title="Create Folder"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={[]}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Form
+          name="wrap"
+          labelCol={{ flex: '110px' }}
+          labelAlign="left"
+          labelWrap
+          wrapperCol={{ flex: 1 }}
+          colon={false}
+          style={{ maxWidth: 600 }}
+          initialValues={{ folderName: 'Untitled' }}
+          onFinish={handleOnSubmit}
+        >
+          <Form.Item name="folderName" rules={[{ required: true }]}>
+            <Input placeholder="Folder Name" autoFocus />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Create
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

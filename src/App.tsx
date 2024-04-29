@@ -9,6 +9,7 @@ import MetamaskAuth from './components/pages/MetamaskAuth';
 import Dashboard from './components/pages/Dashboard';
 import { useSDK } from '@metamask/sdk-react-ui';
 import PageLoading from './components/pages/PageLoading';
+import FileDriveProvider from './contexts/FileDriveProvider';
 
 const Authenticate: React.FC<{
   children: JSX.Element | JSX.Element[];
@@ -58,7 +59,9 @@ const App: React.FC = () => {
         },
       }}
     >
-      <RouterProvider router={router}></RouterProvider>
+      <FileDriveProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </FileDriveProvider>
     </ConfigProvider>
   );
 };
