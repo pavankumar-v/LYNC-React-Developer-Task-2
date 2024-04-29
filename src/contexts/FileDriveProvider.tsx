@@ -1,7 +1,9 @@
-import { FileDrive, Folder } from '@/lib/interface';
-import { getFiles, setFiles } from '@/services/fileDrive';
+import { initalState, rootFolderId } from '@/lib/constants';
+import { File, FileDrive, Folder } from '@/lib/interface';
+import { createFolder, getFilesByAccount, getFolderByAccount } from '@/services/fileDrive';
 import { useSDK } from '@metamask/sdk-react-ui';
 import React, { createContext, useEffect, useReducer, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -11,27 +13,22 @@ type FileDriveAction = {
   type: 'createFoler' | 'initalize';
   payload?: {
     fileDrive?: FileDrive;
-    account: string;
     file?: File;
     folder?: Folder;
   };
 };
 
-const fileDriveReducer = (
-  state: FileDrive,
-  action: FileDriveAction
-): FileDrive => {
+const fileDriveReducer = (state: FileDrive, action: FileDriveAction): FileDrive => {
   switch (action.type) {
     case 'initalize':
       return action.payload?.fileDrive || initalState;
     case 'createFoler':
       if (action.payload?.folder) {
+        createFolder(action.payload.folder);
         state = {
           ...state,
-          dirs: [...state.dirs, action.payload?.folder],
+          folders: [...state.folders, action.payload.folder],
         };
-        console.log(action.payload.account);
-        localStorage.setItem(action.payload.account, JSON.stringify(state));
         return state;
       }
 
@@ -41,30 +38,21 @@ const fileDriveReducer = (
   }
 };
 
-export const initalState: FileDrive = {
-  id: 'ROOT',
-  name: 'My Drive',
-  dirs: [],
-  files: [],
-};
-
 export type FileDriveContextType = {
   fileDrive: FileDrive;
   fileDriveDispatch: React.Dispatch<FileDriveAction>;
   currentFolderId: string;
   setCurrentFolder: React.Dispatch<React.SetStateAction<string>>;
+  currentFilePath: string[];
+  getFilesByFolderId: (folerId: string) => File[];
 };
 
-export const FileDriveContext = createContext<FileDriveContextType | null>(
-  null
-);
+export const FileDriveContext = createContext<FileDriveContextType | null>(null);
 
 const FileDriveProvider: React.FC<Props> = ({ children }) => {
-  const [fileDrive, fileDriveDispatch] = useReducer(
-    fileDriveReducer,
-    initalState
-  );
-  const [currentFolderId, setCurrentFolder] = useState<string>('ROOT');
+  const [fileDrive, fileDriveDispatch] = useReducer(fileDriveReducer, initalState);
+  const { folderId } = useParams();
+  const [currentFolderId, setCurrentFolder] = useState<string>(folderId || 'my-drive');
 
   const { account = '' } = useSDK();
 
@@ -75,16 +63,34 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
   }, [account]);
 
   function initializeFileDrive() {
-    const files: FileDrive | null = getFiles(account);
-    console.log(files);
-    if (files == null) {
-      return setFiles(account, initalState);
-    }
-
     return fileDriveDispatch({
       type: 'initalize',
-      payload: { fileDrive: files || initalState, account },
+      payload: {
+        fileDrive: {
+          name: rootFolderId,
+          folders: getFolderByAccount(account),
+          files: getFilesByAccount(account),
+        },
+      },
     });
+  }
+
+  function getFolderHierarchy(folderId: string, folderHierarchy: string[] = []) {
+    if (folderId === rootFolderId) {
+      return folderHierarchy;
+    }
+
+    const folder: Folder | undefined = fileDrive.folders.find((folder) => folder.id === folderId);
+    if (folder?.parentFolderID) {
+      folderHierarchy = [folder.parentFolderID, ...folderHierarchy];
+    }
+
+    return getFolderHierarchy(folder?.parentFolderID || '', folderHierarchy);
+  }
+
+  function getFilesByFolderId(folderId: string): File[] {
+    const filesByFolderId: File[] = fileDrive.files.filter((file) => file.folderId === folderId);
+    return filesByFolderId;
   }
 
   return (
@@ -94,6 +100,8 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
         fileDriveDispatch,
         currentFolderId,
         setCurrentFolder,
+        currentFilePath: getFolderHierarchy(currentFolderId),
+        getFilesByFolderId,
       }}
     >
       {children}

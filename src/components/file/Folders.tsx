@@ -1,7 +1,9 @@
 import { type Folder } from '@/lib/interface';
 import { Button, Col, Row } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FolderIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
+import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
 type Props = {
   folders: Folder[];
@@ -30,12 +32,21 @@ const Folders: React.FC<Props> = ({ folders }) => {
 };
 
 const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
+  const navigate = useNavigate();
+  const { setCurrentFolder } = useContext(FileDriveContext) as FileDriveContextType;
+
+  function handleFolderDoubleClick() {
+    navigate(`/dashboard/${folder.id}`);
+    setCurrentFolder(folder.id);
+  }
+
   return (
     <Button
       type="text"
       icon={<FolderIcon width={16} />}
       size="large"
-      className="flex items-center hover:cursor-default bg-gray-200"
+      className="flex items-center hover:bg-blue-300 hover:cursor-default bg-gray-200 focus:bg-blue-300 active:bg-blue-300"
+      onDoubleClick={handleFolderDoubleClick}
     >
       {folder.folderName}
     </Button>

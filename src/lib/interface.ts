@@ -1,7 +1,6 @@
 export interface FileDrive {
-  id: 'ROOT';
   name: string;
-  dirs: Folder[];
+  folders: Folder[];
   files: File[];
 }
 
@@ -10,11 +9,13 @@ export interface File {
   fileName: string;
   TimeStamp: Date;
   PinSize: number;
+  accountId: string;
   folderId: string;
 }
 
 export interface Folder {
   id: string;
+  accountId: string;
   folderName: string;
   parentFolderID: string;
   createdAt: Date;

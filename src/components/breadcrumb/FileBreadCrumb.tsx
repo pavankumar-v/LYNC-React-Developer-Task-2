@@ -1,14 +1,11 @@
-import {
-  FileDriveContext,
-  FileDriveContextType,
-} from '@/contexts/FileDriveProvider';
+import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 import { Breadcrumb } from 'antd';
 import React, { useContext } from 'react';
 
 const FileBreadCrumb: React.FC = () => {
-  const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
+  const { currentFilePath } = useContext(FileDriveContext) as FileDriveContextType;
 
-  console.log(fileDrive);
+  console.log(currentFilePath);
   return (
     <div>
       <Breadcrumb

@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
-import {
-  DocumentPlusIcon,
-  ArrowUpOnSquareIcon,
-} from '@heroicons/react/24/outline';
-import {
-  Button,
-  GetProp,
-  Modal,
-  Upload,
-  UploadFile,
-  UploadProps,
-  message,
-} from 'antd';
+import { DocumentPlusIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
+import { Button, GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd';
 import useModal from '@/hooks/useModal';
 import { fileUpload } from '@/services/fileUpload.ts';
 
@@ -45,7 +34,6 @@ const NewFileUploadButton: React.FC = () => {
       setFile(null);
     },
     beforeUpload: (file) => {
-      console.log(file);
       setFile(file);
 
       return false;

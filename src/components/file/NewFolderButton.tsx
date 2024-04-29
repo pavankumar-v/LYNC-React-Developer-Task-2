@@ -2,10 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
 import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import useModal from '@/hooks/useModal';
-import {
-  FileDriveContext,
-  FileDriveContextType,
-} from '@/contexts/FileDriveProvider';
+import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
 import { nanoid } from 'nanoid';
 import { Folder } from '@/lib/interface';
@@ -16,20 +13,19 @@ const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
   const { folderId } = useParams();
   const { account = '' } = useSDK();
-  const { fileDriveDispatch } = useContext(
-    FileDriveContext
-  ) as FileDriveContextType;
+  const { fileDriveDispatch } = useContext(FileDriveContext) as FileDriveContextType;
 
   function handleOnSubmit(values: { folderName: string }) {
     const folder: Folder = {
       id: nanoid(),
       folderName: values.folderName,
       createdAt: new Date(),
-      parentFolderID: folderId || 'ROOT',
+      parentFolderID: folderId || 'my-drive',
       files: [],
+      accountId: account,
     };
 
-    fileDriveDispatch({ type: 'createFoler', payload: { folder, account } });
+    fileDriveDispatch({ type: 'createFoler', payload: { folder } });
   }
 
   return (

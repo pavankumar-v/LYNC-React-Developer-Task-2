@@ -1,10 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import MetamaskAuth from './components/pages/MetamaskAuth';
 import Dashboard from './components/pages/Dashboard';
 import { useSDK } from '@metamask/sdk-react-ui';
@@ -15,24 +11,28 @@ const Authenticate: React.FC<{
   children: JSX.Element | JSX.Element[];
 }> = ({ children }) => {
   const { connected, account, connecting, ready } = useSDK();
+  useEffect(() => {
+    if (account) {
+      localStorage.setItem('accountId', JSON.stringify(account));
+    }
+  }, []);
+  if (ready) {
+    if (connecting) {
+      return <PageLoading />;
+    }
 
-  if (!ready) {
+    if (!connected) {
+      return <Navigate to="/auth/metamask" />;
+    }
+
+    if (!account) {
+      return <Navigate to="/auth/metamask" />;
+    }
+
+    return children;
+  } else {
     return <PageLoading />;
   }
-
-  if (connecting) {
-    return <PageLoading />;
-  }
-
-  if (!connected) {
-    return <Navigate to="/auth/metamask" />;
-  }
-
-  if (!account) {
-    return <Navigate to="/auth/metamask" />;
-  }
-
-  return children;
 };
 
 const router = createBrowserRouter([

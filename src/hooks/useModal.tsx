@@ -4,7 +4,6 @@ function useModal(defaultState?: boolean) {
   const [isModalOpen, setIsModalOpen] = useState(defaultState || false);
 
   const showModal = (e: React.MouseEvent<HTMLElement>) => {
-    console.log('first');
     e.preventDefault();
     e.stopPropagation();
     setIsModalOpen(true);

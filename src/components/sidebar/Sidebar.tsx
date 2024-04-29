@@ -1,8 +1,9 @@
 import React from 'react';
-import Sider from 'antd/es/layout/Sider';
 import { Menu } from 'antd';
 // import { DesktopOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
+import { Layout } from 'antd';
+const { Sider } = Layout;
 
 const { Title } = Typography;
 // type MenuItem = Required<MenuProps>['items'][number];
@@ -28,7 +29,7 @@ const { Title } = Typography;
 
 const Sidebar: React.FC = () => {
   return (
-    <Sider>
+    <Sider style={{ height: '100%' }}>
       <Title level={5} className="!text-white p-4">
         File Drive
       </Title>

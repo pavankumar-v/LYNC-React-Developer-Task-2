@@ -1,7 +1,7 @@
-import { FileDrive } from '@/lib/interface';
+import { files, folders } from '@/lib/constants';
+import { File, FileDrive, Folder } from '@/lib/interface';
 
 export function getFiles(account: string): FileDrive | null {
-  console.log(account);
   const filesJsonString = localStorage.getItem(account);
 
   if (filesJsonString) {
@@ -16,17 +16,15 @@ export function setFiles(acconut: string, fileDrive: FileDrive) {
   localStorage.setItem(acconut, JSON.stringify(fileDrive));
 }
 
-export function getFolderHierarchy(folderId, folderHierarchy = []) {
-  if (folderId === 'ROOT') {
-    return folderHierarchy;
-  }
-  const folder = folders.find((folder) => folder.id === folderId);
-  folderHierarchy = [folder.parentFolderId, ...folderHierarchy];
-
-  return getFolderHierarchy(folder.parentFolderId, folderHierarchy);
+export function createFolder(folder: Folder) {
+  const updatedFolders: Folder[] = [...folders, folder];
+  localStorage.setItem('folders', JSON.stringify(updatedFolders));
 }
 
-export function getFilesByFolderId(folderId) {
-  const filesByFolderId = files.filter((file) => file.folderId === folderId);
-  return filesByFolderId;
+export function getFolderByAccount(accountId: string) {
+  return folders.filter((folder: Folder) => folder.accountId === accountId);
+}
+
+export function getFilesByAccount(accountId: string) {
+  return files.filter((file: File) => file.accountId === accountId);
 }
