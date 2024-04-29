@@ -13,7 +13,7 @@ import {
   message,
 } from 'antd';
 import useModal from '@/hooks/useModal';
-import { fileUpload } from '@/services/fileUpload';
+import { fileUpload } from '@/services/fileUpload.ts';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 

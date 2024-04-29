@@ -1,15 +1,19 @@
 import { FileDrive, Folder } from '@/lib/interface';
-import React, { createContext, useReducer } from 'react';
+import { getFiles, setFiles } from '@/services/fileDrive';
+import { useSDK } from '@metamask/sdk-react-ui';
+import React, { createContext, useEffect, useReducer } from 'react';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
 
 type FileDriveAction = {
-  type: 'createFoler';
+  type: 'createFoler' | 'initalize';
   payload?: {
+    fileDrive?: FileDrive;
+    account: string;
     file?: File;
-    folder: Folder;
+    folder?: Folder;
   };
 };
 
@@ -18,12 +22,17 @@ const fileDriveReducer = (
   action: FileDriveAction
 ): FileDrive => {
   switch (action.type) {
+    case 'initalize':
+      return action.payload?.fileDrive || initalState;
     case 'createFoler':
       if (action.payload?.folder) {
-        return {
+        state = {
           ...state,
           dirs: [...state.dirs, action.payload?.folder],
         };
+        console.log(action.payload.account);
+        localStorage.setItem(action.payload.account, JSON.stringify(state));
+        return state;
       }
 
       return state;
@@ -32,8 +41,9 @@ const fileDriveReducer = (
   }
 };
 
-const initalState: FileDrive = {
+export const initalState: FileDrive = {
   id: 'ROOT',
+  name: 'My Drive',
   dirs: [],
   files: [],
 };
@@ -52,6 +62,27 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
     fileDriveReducer,
     initalState
   );
+
+  const { account = '' } = useSDK();
+
+  useEffect(() => {
+    if (account) {
+      initializeFileDrive();
+    }
+  }, [account]);
+
+  function initializeFileDrive() {
+    const files: FileDrive | null = getFiles(account);
+    console.log(files);
+    if (files == null) {
+      return setFiles(account, initalState);
+    }
+
+    return fileDriveDispatch({
+      type: 'initalize',
+      payload: { fileDrive: files || initalState, account },
+    });
+  }
 
   return (
     <FileDriveContext.Provider value={{ fileDrive, fileDriveDispatch }}>

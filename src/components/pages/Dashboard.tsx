@@ -1,12 +1,13 @@
 import Sidebar from '@components/sidebar/Sidebar';
 import Navbar from '@components/navbar/Navbar';
-import { Layout, Breadcrumb, theme } from 'antd';
+import { Layout, theme } from 'antd';
 import { useContext } from 'react';
 import {
   FileDriveContext,
   FileDriveContextType,
 } from '@/contexts/FileDriveProvider';
 import Folders from '@components/file/Folders';
+import FileBreadCrumb from '../breadcrumb/FileBreadCrumb';
 
 const { Header, Content } = Layout;
 
@@ -17,8 +18,6 @@ const Dashboard = () => {
 
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
 
-  console.log(fileDrive);
-
   return (
     <Layout style={{ height: '100%' }}>
       <Sidebar />
@@ -26,25 +25,7 @@ const Dashboard = () => {
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Navbar />
         </Header>
-        <Breadcrumb
-          items={[
-            {
-              title: 'Home',
-            },
-            {
-              title: 'Application Center',
-              href: '',
-            },
-            {
-              title: 'Application List',
-              href: '',
-            },
-            {
-              title: 'An Application',
-            },
-          ]}
-          className="m-4"
-        />
+        <FileBreadCrumb />
         <Content
           className="mx-4 bg-white p-4"
           style={{ borderRadius: borderRadiusLG }}

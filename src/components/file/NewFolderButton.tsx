@@ -9,9 +9,11 @@ import {
 
 import { nanoid } from 'nanoid';
 import { Folder } from '@/lib/interface';
+import { useSDK } from '@metamask/sdk-react-ui';
 
 const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
+  const { account = '' } = useSDK();
   const { fileDriveDispatch } = useContext(
     FileDriveContext
   ) as FileDriveContextType;
@@ -24,7 +26,7 @@ const NewFolderButton: React.FC = () => {
       files: [],
     };
 
-    fileDriveDispatch({ type: 'createFoler', payload: { folder } });
+    fileDriveDispatch({ type: 'createFoler', payload: { folder, account } });
   }
 
   return (

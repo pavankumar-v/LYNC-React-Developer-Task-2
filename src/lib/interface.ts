@@ -1,5 +1,6 @@
 export interface FileDrive {
   id: string;
+  name: string;
   dirs: Folder[];
   files: File[];
 }
