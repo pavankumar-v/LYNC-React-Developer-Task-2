@@ -75,6 +75,7 @@ export type FileDriveContextType = {
   getFolderHierarchy: (folderId: string, folderHierarchy?: FolderHierarchy[]) => FolderHierarchy[];
   getFilesByFolderId: (folerId: string) => File[];
   getCurrentFolderDir: () => Folder[];
+  getCurrentDirFiles: () => File[];
 };
 
 export const FileDriveContext = createContext<FileDriveContextType | null>(null);
@@ -100,8 +101,8 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
       payload: {
         fileDrive: {
           name: rootFolderId,
-          folders: getFolderByAccount(account).filter((folder) => folder.parentFolderID === fileDrive.currentFolderId),
-          files: getFilesByAccount(account),
+          folders: getCurrentFolderDir(),
+          files: getCurrentDirFiles(),
           currentFolderId: fileDrive.currentFolderId || rootFolderId,
         },
       },
@@ -134,6 +135,10 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
     return getFolderByAccount(account).filter((folder) => folder.parentFolderID == fileDrive.currentFolderId);
   }
 
+  function getCurrentDirFiles(): File[] {
+    return getFilesByAccount(account).filter((file) => file.folderId == fileDrive.currentFolderId);
+  }
+
   return (
     <FileDriveContext.Provider
       value={{
@@ -144,6 +149,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
         getFolderHierarchy,
         getFilesByFolderId,
         getCurrentFolderDir,
+        getCurrentDirFiles,
       }}
     >
       {children}

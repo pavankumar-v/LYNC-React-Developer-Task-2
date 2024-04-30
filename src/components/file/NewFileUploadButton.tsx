@@ -14,7 +14,9 @@ const NewFileUploadButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
   const [file, setFile] = useState<UploadFile | null>();
   const [uploading, setUploading] = useState(false);
-  const { currentFolderId } = useContext(FileDriveContext) as FileDriveContextType;
+  const { currentFolderId, fileDriveDispatch, getCurrentDirFiles } = useContext(
+    FileDriveContext
+  ) as FileDriveContextType;
   const { account } = useSDK();
 
   const handleUpload = async () => {
@@ -24,16 +26,16 @@ const NewFileUploadButton: React.FC = () => {
 
     fileUpload(formData)
       .then((res: PinataFile) => {
-        console.log(res);
         const newFile: File = {
           accountId: account,
-          fileName: file?.fileName || 'Untitled',
+          fileName: file?.name || 'Untitled',
           IpfsHash: res.IpfsHash,
           folderId: currentFolderId,
           PinSize: res.PinSize,
           TimeStamp: res.Timestamp,
         };
         createFile(newFile);
+        fileDriveDispatch({ type: 'addFiles', payload: { files: getCurrentDirFiles() } });
         setFile(null);
         message.success('upload successfully.');
       })
