@@ -1,5 +1,5 @@
 import { type Folder } from '@/lib/interface';
-import { Button, Col, Dropdown, Empty, MenuProps, Popconfirm, PopconfirmProps, Row, message } from 'antd';
+import { Button, Col, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Row, message } from 'antd';
 import React, { useContext } from 'react';
 import { FolderIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
@@ -10,28 +10,26 @@ const Folders: React.FC = () => {
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
   const { folders } = fileDrive;
 
-  if (folders.length == 0) {
-    return <Empty />;
-  }
-
   return (
-    <Row gutter={[30, 20]}>
-      {folders.map((folder: Folder, index) => {
-        const key = `col-${index}`;
-        return (
-          <Col
-            key={key}
-            xs={{ flex: '100%' }}
-            sm={{ flex: '50%' }}
-            md={{ flex: '40%' }}
-            lg={{ flex: '20%' }}
-            xl={{ flex: '10%' }}
-          >
-            <Folder folder={folder} />
-          </Col>
-        );
-      })}
-    </Row>
+    <>
+      <Row gutter={[30, 20]}>
+        {folders.map((folder: Folder, index) => {
+          const key = `col-${index}`;
+          return (
+            <Col
+              key={key}
+              xs={{ flex: '100%' }}
+              sm={{ flex: '50%' }}
+              md={{ flex: '40%' }}
+              lg={{ flex: '20%' }}
+              xl={{ flex: '10%' }}
+            >
+              <Folder folder={folder} />
+            </Col>
+          );
+        })}
+      </Row>
+    </>
   );
 };
 
