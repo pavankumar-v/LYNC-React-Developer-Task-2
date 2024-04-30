@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Form, Input, Modal } from 'antd';
+import { Button, Form, Input, Modal, message } from 'antd';
 import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import useModal from '@/hooks/useModal';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
@@ -29,6 +29,7 @@ const NewFolderButton: React.FC = () => {
     fileDriveDispatch({ type: 'createFolder', payload: { folder: { ...folder } } });
     handleCancel();
     form.resetFields();
+    message.success('Folder Create Successfully');
   }
 
   return (
