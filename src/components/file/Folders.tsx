@@ -1,9 +1,10 @@
 import { type Folder } from '@/lib/interface';
-import { Button, Col, Dropdown, MenuProps, Row } from 'antd';
+import { Button, Col, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Row, message } from 'antd';
 import React, { useContext } from 'react';
 import { FolderIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
+import { deleteFolder } from '@/services/fileDrive';
 
 const Folders: React.FC = () => {
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
@@ -42,10 +43,13 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
     {
       key: 'rename',
       label: 'Rename',
+      onClick: () => {
+        // renameFolder(folder.id, )
+      },
     },
     {
       key: 'delete',
-      label: 'Delete',
+      label: <DeleteFolderButton folderId={folder.id} />,
       danger: true,
     },
   ];
@@ -63,6 +67,28 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
         <EllipsisVerticalIcon width={25} className="hover:cursor-pointer hover:bg-gray-200 rounded-lg ml-2 p-1" />
       </Dropdown>
     </Button>
+  );
+};
+
+export const DeleteFolderButton: React.FC<{ folderId: string }> = ({ folderId }) => {
+  const { fileDriveDispatch, getCurrentFolderDir } = useContext(FileDriveContext) as FileDriveContextType;
+
+  const confirm: PopconfirmProps['onConfirm'] = () => {
+    deleteFolder(folderId);
+    fileDriveDispatch({ type: 'updateFolders', payload: { folders: getCurrentFolderDir() } });
+    message.success('Folder Deleted');
+  };
+
+  return (
+    <Popconfirm
+      title="Are you sure?"
+      description="Are you sure to delete this folder?"
+      onConfirm={confirm}
+      okText="Yes"
+      cancelText="No"
+    >
+      Delete
+    </Popconfirm>
   );
 };
 

@@ -1,4 +1,4 @@
-import { files, folders, initalState, rootFolderId } from '@/lib/constants';
+import { files, getFolders, initalState, rootFolderId } from '@/lib/constants';
 import { File, FileDrive, Folder } from '@/lib/interface';
 import { FolderHierarchy } from '@/lib/types';
 import { createFolder, getFilesByAccount, getFolderByAccount } from '@/services/fileDrive';
@@ -10,12 +10,13 @@ type Props = {
 };
 
 type FileDriveAction = {
-  type: 'initalize' | 'createFolder' | 'setCurrentFolder';
+  type: 'initalize' | 'createFolder' | 'setCurrentFolder' | 'updateFolders';
   payload?: {
     fileDrive?: FileDrive;
     file?: File;
     folder?: Folder;
     currentFolder?: string;
+    folders?: Folder[];
   };
 };
 
@@ -42,6 +43,15 @@ const fileDriveReducer = (state: FileDrive, action: FileDriveAction): FileDrive 
       }
 
       return state;
+    case 'updateFolders':
+      if (action.payload?.folders) {
+        return {
+          ...state,
+          folders: action.payload.folders,
+        };
+      }
+
+      return state;
     default:
       return state;
   }
@@ -54,6 +64,7 @@ export type FileDriveContextType = {
   setCurrentFolder: (folderId: string) => void;
   getFolderHierarchy: (folderId: string, folderHierarchy?: FolderHierarchy[]) => FolderHierarchy[];
   getFilesByFolderId: (folerId: string) => File[];
+  getCurrentFolderDir: () => Folder[];
 };
 
 export const FileDriveContext = createContext<FileDriveContextType | null>(null);
@@ -92,7 +103,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
       return [{ folderId: rootFolderId, label: 'My Drive' }, ...folderHierarchy];
     }
 
-    const folder: Folder | undefined = folders().find((folder) => folder.id === folderId);
+    const folder: Folder | undefined = getFolders().find((folder) => folder.id === folderId);
     if (folder?.parentFolderID) {
       folderHierarchy = [{ folderId: folder.id, label: folder.folderName }, ...folderHierarchy];
     }
@@ -109,6 +120,10 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
     fileDriveDispatch({ type: 'setCurrentFolder', payload: { currentFolder: folderId } });
   }
 
+  function getCurrentFolderDir(): Folder[] {
+    return getFolderByAccount(account).filter((folder) => folder.parentFolderID == fileDrive.currentFolderId);
+  }
+
   return (
     <FileDriveContext.Provider
       value={{
@@ -118,6 +133,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
         setCurrentFolder,
         getFolderHierarchy,
         getFilesByFolderId,
+        getCurrentFolderDir,
       }}
     >
       {children}
