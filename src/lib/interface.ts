@@ -2,6 +2,7 @@ export interface FileDrive {
   name: string;
   folders: Folder[];
   files: File[];
+  currentFolderId: string;
 }
 
 export interface File {

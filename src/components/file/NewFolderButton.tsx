@@ -11,13 +11,14 @@ import { useParams } from 'react-router-dom';
 
 const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
+  const [form] = Form.useForm();
   const { folderId } = useParams();
   const { account = '' } = useSDK();
   const { fileDriveDispatch } = useContext(FileDriveContext) as FileDriveContextType;
 
   function handleOnSubmit(values: { folderName: string }) {
     const folder: Folder = {
-      id: nanoid(),
+      id: nanoid(20),
       folderName: values.folderName,
       createdAt: new Date(),
       parentFolderID: folderId || 'my-drive',
@@ -25,7 +26,9 @@ const NewFolderButton: React.FC = () => {
       accountId: account,
     };
 
-    fileDriveDispatch({ type: 'createFoler', payload: { folder } });
+    fileDriveDispatch({ type: 'createFolder', payload: { folder: { ...folder } } });
+    handleCancel();
+    form.resetFields();
   }
 
   return (
@@ -33,14 +36,9 @@ const NewFolderButton: React.FC = () => {
       <div className="flex items-center gap-2" onClick={showModal}>
         <FolderPlusIcon width={18} /> New Folder
       </div>
-      <Modal
-        title="Create Folder"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[]}
-      >
+      <Modal title="Create Folder" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <Form
+          form={form}
           name="wrap"
           labelCol={{ flex: '110px' }}
           labelAlign="left"

@@ -8,4 +8,5 @@ export const initalState: FileDrive = {
   name: 'My Drive',
   folders: [],
   files: [],
+  currentFolderId: rootFolderId,
 };

@@ -1,32 +1,34 @@
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 import { Breadcrumb } from 'antd';
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 const FileBreadCrumb: React.FC = () => {
-  const { currentFilePath } = useContext(FileDriveContext) as FileDriveContextType;
+  const { getFolderHierarchy, currentFolderId, setCurrentFolder } = useContext(
+    FileDriveContext
+  ) as FileDriveContextType;
 
-  console.log(currentFilePath);
+  function handleNavigation(folderId: string) {
+    setCurrentFolder(folderId);
+  }
+
+  const items = getFolderHierarchy(currentFolderId, []).map((hierarchy) => ({
+    title: (
+      <Link
+        to={`/dashboard/${hierarchy.folderId}`}
+        onClick={() => {
+          handleNavigation(hierarchy.folderId);
+        }}
+      >
+        {hierarchy.label}
+      </Link>
+    ),
+  }));
+
+  // console.log(getFolderHierarchy(currentFolderId, []));
   return (
     <div>
-      <Breadcrumb
-        items={[
-          {
-            title: 'Home',
-          },
-          {
-            title: 'Application Center',
-            href: '',
-          },
-          {
-            title: 'Application List',
-            href: '',
-          },
-          {
-            title: 'An Application',
-          },
-        ]}
-        className="m-4"
-      />
+      <Breadcrumb items={items} className="m-4" />
     </div>
   );
 };

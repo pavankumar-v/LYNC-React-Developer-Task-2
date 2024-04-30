@@ -5,13 +5,16 @@ import { FolderIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
-type Props = {
-  folders: Folder[];
-};
+// const currentDir = getFolderByAccount(account).filter(
+//   (folder) => folder.parentFolderID === currentFolderId
+// );
 
-const Folders: React.FC<Props> = ({ folders }) => {
+const Folders: React.FC = () => {
+  const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
+  const { folders } = fileDrive;
+  // console.log(folders);
   return (
-    <Row gutter={30}>
+    <Row gutter={[30, 20]}>
       {folders.map((folder: Folder, index) => {
         const key = `col-${index}`;
         return (
@@ -36,6 +39,7 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
   const { setCurrentFolder } = useContext(FileDriveContext) as FileDriveContextType;
 
   function handleFolderDoubleClick() {
+    console.log(folder.id);
     navigate(`/dashboard/${folder.id}`);
     setCurrentFolder(folder.id);
   }

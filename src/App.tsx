@@ -11,11 +11,13 @@ const Authenticate: React.FC<{
   children: JSX.Element | JSX.Element[];
 }> = ({ children }) => {
   const { connected, account, connecting, ready } = useSDK();
+
   useEffect(() => {
     if (account) {
       localStorage.setItem('accountId', JSON.stringify(account));
     }
-  }, []);
+  }, [account]);
+
   if (ready) {
     if (connecting) {
       return <PageLoading />;

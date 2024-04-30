@@ -1,10 +1,9 @@
 import Sidebar from '@components/sidebar/Sidebar';
 import Navbar from '@components/navbar/Navbar';
 import { Layout, theme } from 'antd';
-import { useContext } from 'react';
-import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 import Folders from '@components/file/Folders';
 import FileBreadCrumb from '../breadcrumb/FileBreadCrumb';
+import { useParams } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
@@ -12,8 +11,7 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
+  console.log(useParams());
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -25,7 +23,7 @@ const Dashboard = () => {
         <FileBreadCrumb />
         <Content className="mx-4 bg-white p-4" style={{ borderRadius: borderRadiusLG }}>
           <h2 className="text-lg font-semibold mb-3">Folders</h2>
-          <Folders folders={fileDrive.folders} />
+          <Folders />
         </Content>
       </Layout>
     </Layout>
