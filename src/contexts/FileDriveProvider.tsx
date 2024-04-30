@@ -95,7 +95,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
 
     const folder: Folder | undefined = folders.find((folder) => folder.id === folderId);
     if (folder?.parentFolderID) {
-      folderHierarchy = [{ folderId: folder.parentFolderID, label: folder.folderName }, ...folderHierarchy];
+      folderHierarchy = [{ folderId: folder.id, label: folder.folderName }, ...folderHierarchy];
     }
 
     return getFolderHierarchy(folder?.parentFolderID || rootFolderId, folderHierarchy);
