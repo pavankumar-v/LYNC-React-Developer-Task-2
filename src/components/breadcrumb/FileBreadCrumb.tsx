@@ -25,7 +25,6 @@ const FileBreadCrumb: React.FC = () => {
     ),
   }));
 
-  // console.log(getFolderHierarchy(currentFolderId, []));
   return (
     <div>
       <Breadcrumb items={items} className="m-4" />

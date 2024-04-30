@@ -3,7 +3,6 @@ import Navbar from '@components/navbar/Navbar';
 import { Layout, theme } from 'antd';
 import Folders from '@components/file/Folders';
 import FileBreadCrumb from '../breadcrumb/FileBreadCrumb';
-import { useParams } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
@@ -11,7 +10,6 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  console.log(useParams());
 
   return (
     <Layout style={{ height: '100%' }}>

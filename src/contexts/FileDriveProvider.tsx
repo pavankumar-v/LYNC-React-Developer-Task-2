@@ -25,7 +25,6 @@ const fileDriveReducer = (state: FileDrive, action: FileDriveAction): FileDrive 
       return action.payload?.fileDrive || initalState;
     case 'createFolder':
       if (action.payload?.folder) {
-        console.log('creating folder');
         const updatedFolders = createFolder(action.payload.folder);
         return {
           ...state,
