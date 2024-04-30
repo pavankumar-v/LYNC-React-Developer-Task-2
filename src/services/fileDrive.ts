@@ -45,3 +45,14 @@ export function deleteFolder(folderId: string) {
   }
   return folders;
 }
+
+export function deleteFile(fileId: string) {
+  const files: File[] = getFiles();
+  const index: number | undefined = files.findIndex((file) => file.IpfsHash === fileId);
+
+  if (index > -1) {
+    files.splice(index, 1);
+    localStorage.setItem('files', JSON.stringify(files));
+  }
+  return files;
+}

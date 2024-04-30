@@ -8,6 +8,7 @@ import {
   imageExtentions,
 } from '@/lib/file';
 import { type File } from '@/lib/interface';
+import { deleteFile } from '@/services/fileDrive';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { Row, Col, Dropdown, MenuProps, message, Popconfirm, PopconfirmProps } from 'antd';
 import React, { useContext } from 'react';
@@ -101,14 +102,14 @@ export const FilePreview: React.FC<{ fileName: string; url: string }> = ({ fileN
   }
 };
 
-export const DeleteFileButton: React.FC<{ fileId: string }> = () => {
-  const { fileDriveDispatch, getCurrentFolderDir } = useContext(FileDriveContext) as FileDriveContextType;
+export const DeleteFileButton: React.FC<{ fileId: string }> = ({ fileId }) => {
+  const { fileDriveDispatch, getCurrentDirFiles } = useContext(FileDriveContext) as FileDriveContextType;
 
   const confirm: PopconfirmProps['onConfirm'] = (e) => {
     e?.preventDefault();
-    // deleteFolder(fileId);
-    fileDriveDispatch({ type: 'updateFolders', payload: { folders: getCurrentFolderDir() } });
-    message.success('Folder Deleted');
+    deleteFile(fileId);
+    fileDriveDispatch({ type: 'addFiles', payload: { files: getCurrentDirFiles() } });
+    message.success('File Deleted');
   };
 
   return (
