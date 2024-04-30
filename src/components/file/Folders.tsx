@@ -1,5 +1,5 @@
 import { type Folder } from '@/lib/interface';
-import { Button, Col, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Row, message } from 'antd';
+import { Button, Col, Dropdown, Empty, MenuProps, Popconfirm, PopconfirmProps, Row, message } from 'antd';
 import React, { useContext } from 'react';
 import { FolderIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,11 @@ import { deleteFolder } from '@/services/fileDrive';
 const Folders: React.FC = () => {
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
   const { folders } = fileDrive;
+
+  if (folders.length == 0) {
+    return <Empty />;
+  }
+
   return (
     <Row gutter={[30, 20]}>
       {folders.map((folder: Folder, index) => {
