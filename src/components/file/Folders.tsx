@@ -1,7 +1,7 @@
 import { type Folder } from '@/lib/interface';
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Dropdown, MenuProps, Row } from 'antd';
 import React, { useContext } from 'react';
-import { FolderIcon } from '@heroicons/react/24/solid';
+import { FolderIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
@@ -38,6 +38,18 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
     setCurrentFolder(folder.id);
   }
 
+  const items: MenuProps['items'] = [
+    {
+      key: 'rename',
+      label: 'Rename',
+    },
+    {
+      key: 'delete',
+      label: 'Delete',
+      danger: true,
+    },
+  ];
+
   return (
     <Button
       type="text"
@@ -47,6 +59,9 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
       onDoubleClick={handleFolderDoubleClick}
     >
       {folder.folderName}
+      <Dropdown menu={{ items }} trigger={['click']}>
+        <EllipsisVerticalIcon width={25} className="hover:cursor-pointer hover:bg-gray-200 rounded-lg ml-2 p-1" />
+      </Dropdown>
     </Button>
   );
 };
