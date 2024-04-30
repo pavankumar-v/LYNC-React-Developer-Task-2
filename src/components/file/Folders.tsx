@@ -12,7 +12,6 @@ import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProv
 const Folders: React.FC = () => {
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
   const { folders } = fileDrive;
-  // console.log(folders);
   return (
     <Row gutter={[30, 20]}>
       {folders.map((folder: Folder, index) => {
@@ -39,7 +38,6 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
   const { setCurrentFolder } = useContext(FileDriveContext) as FileDriveContextType;
 
   function handleFolderDoubleClick() {
-    console.log(folder.id);
     navigate(`/dashboard/${folder.id}`);
     setCurrentFolder(folder.id);
   }

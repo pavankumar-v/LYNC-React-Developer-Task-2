@@ -17,9 +17,7 @@ export function setFiles(acconut: string, fileDrive: FileDrive) {
 }
 
 export function createFolder(folder: Folder): Folder[] {
-  console.log(folders);
   const updatedFolders: Folder[] = [...folders, folder];
-  console.log(updatedFolders);
   localStorage.setItem('folders', JSON.stringify([...updatedFolders]));
   return getFolderByAccount(folder.accountId);
 }
