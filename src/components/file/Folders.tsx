@@ -35,7 +35,7 @@ const Folders: React.FC = () => {
 
 const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
   const navigate = useNavigate();
-  const { setCurrentFolder } = useContext(FileDriveContext) as FileDriveContextType;
+  const { setCurrentFolder, setFolder } = useContext(FileDriveContext) as FileDriveContextType;
 
   function handleFolderDoubleClick() {
     navigate(`/dashboard/${folder.id}`);
@@ -47,7 +47,8 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
       key: 'rename',
       label: 'Rename',
       onClick: () => {
-        // renameFolder(folder.id, )
+        console.log('first');
+        setFolder(folder);
       },
     },
     {

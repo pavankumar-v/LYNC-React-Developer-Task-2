@@ -16,7 +16,7 @@ export interface File {
 
 export interface Folder {
   id: string;
-  accountId: string;
+  accountId?: string;
   folderName: string;
   parentFolderID: string;
   createdAt: Date;

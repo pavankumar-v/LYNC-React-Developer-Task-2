@@ -1,36 +1,27 @@
-import React, { useContext } from 'react';
-import { Button, Form, Input, Modal, message } from 'antd';
+import React from 'react';
+import { Modal } from 'antd';
 import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import useModal from '@/hooks/useModal';
-import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
 import { nanoid } from 'nanoid';
 import { Folder } from '@/lib/interface';
 import { useSDK } from '@metamask/sdk-react-ui';
 import { useParams } from 'react-router-dom';
+import FolderForm from './FolderForm';
+import { rootFolderId } from '@/lib/constants';
 
 const NewFolderButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
-  const [form] = Form.useForm();
   const { folderId } = useParams();
-  const { account = '' } = useSDK();
-  const { fileDriveDispatch } = useContext(FileDriveContext) as FileDriveContextType;
+  const { account } = useSDK();
 
-  function handleOnSubmit(values: { folderName: string }) {
-    const folder: Folder = {
-      id: nanoid(20),
-      folderName: values.folderName,
-      createdAt: new Date(),
-      parentFolderID: folderId || 'my-drive',
-      files: [],
-      accountId: account,
-    };
-
-    fileDriveDispatch({ type: 'createFolder', payload: { folder: { ...folder } } });
-    handleCancel();
-    form.resetFields();
-    message.success('Folder Create Successfully');
-  }
+  const folder: Folder = {
+    id: nanoid(10),
+    accountId: account,
+    folderName: 'Untitled',
+    parentFolderID: folderId || rootFolderId,
+    createdAt: new Date(),
+  };
 
   return (
     <>
@@ -38,28 +29,7 @@ const NewFolderButton: React.FC = () => {
         <FolderPlusIcon width={18} /> New Folder
       </div>
       <Modal title="Create Folder" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
-        <Form
-          form={form}
-          name="wrap"
-          labelCol={{ flex: '110px' }}
-          labelAlign="left"
-          labelWrap
-          wrapperCol={{ flex: 1 }}
-          colon={false}
-          style={{ maxWidth: 600 }}
-          initialValues={{ folderName: 'Untitled' }}
-          onFinish={handleOnSubmit}
-        >
-          <Form.Item name="folderName" rules={[{ required: true }]}>
-            <Input placeholder="Folder Name" autoFocus />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Create
-            </Button>
-          </Form.Item>
-        </Form>
+        <FolderForm folder={folder} onSubmitCallback={handleCancel} />
       </Modal>
     </>
   );

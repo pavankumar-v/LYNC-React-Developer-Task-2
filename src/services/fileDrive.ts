@@ -8,7 +8,7 @@ export function setFiles(acconut: string, fileDrive: FileDrive) {
 export function createFolder(folder: Folder): Folder[] {
   const updatedFolders: Folder[] = [...getFolders(), folder];
   localStorage.setItem('folders', JSON.stringify([...updatedFolders]));
-  return getFolderByAccount(folder.accountId);
+  return getFolderByAccount(folder.accountId || '');
 }
 
 export function createFile(file: File) {
@@ -30,6 +30,7 @@ export function renameFolder(folderId: string, newName: string) {
 
   if (index > -1) {
     folders[index]['folderName'] = newName;
+    localStorage.setItem('folders', JSON.stringify(folders));
   }
 
   return folders;

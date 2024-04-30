@@ -1,9 +1,12 @@
+import FolderForm from '@/components/file/FolderForm';
+import useModal from '@/hooks/useModal';
 import { getFiles, getFolders, initalState, rootFolderId } from '@/lib/constants';
 import { File, FileDrive, Folder } from '@/lib/interface';
 import { FolderHierarchy } from '@/lib/types';
 import { createFolder, getFilesByAccount, getFolderByAccount } from '@/services/fileDrive';
 import { useSDK } from '@metamask/sdk-react-ui';
-import React, { createContext, useEffect, useReducer } from 'react';
+import { Modal } from 'antd';
+import React, { createContext, useEffect, useReducer, useState } from 'react';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -76,13 +79,16 @@ export type FileDriveContextType = {
   getFilesByFolderId: (folerId: string) => File[];
   getCurrentFolderDir: () => Folder[];
   getCurrentDirFiles: () => File[];
+  folder: Folder | null;
+  setFolder: React.Dispatch<React.SetStateAction<Folder | null>>;
 };
 
 export const FileDriveContext = createContext<FileDriveContextType | null>(null);
 
 const FileDriveProvider: React.FC<Props> = ({ children }) => {
   const [fileDrive, fileDriveDispatch] = useReducer(fileDriveReducer, initalState);
-
+  const [folder, setFolder] = useState<Folder | null>(null);
+  const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
   const { account = '' } = useSDK();
 
   useEffect(() => {
@@ -92,8 +98,10 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
   }, [account, fileDrive.currentFolderId]);
 
   useEffect(() => {
-    setCurrentFolder(rootFolderId);
-  }, [account]);
+    if (folder) {
+      showModal();
+    }
+  }, [folder]);
 
   function initializeFileDrive() {
     return fileDriveDispatch({
@@ -150,9 +158,15 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
         getFilesByFolderId,
         getCurrentFolderDir,
         getCurrentDirFiles,
+        folder,
+        setFolder,
       }}
     >
       {children}
+
+      <Modal title="Update Folder" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
+        {folder && <FolderForm folder={folder} onSubmitCallback={handleCancel} edit />}
+      </Modal>
     </FileDriveContext.Provider>
   );
 };
