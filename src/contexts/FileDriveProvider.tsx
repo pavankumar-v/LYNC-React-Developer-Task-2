@@ -1,4 +1,4 @@
-import { files, getFolders, initalState, rootFolderId } from '@/lib/constants';
+import { getFiles, getFolders, initalState, rootFolderId } from '@/lib/constants';
 import { File, FileDrive, Folder } from '@/lib/interface';
 import { FolderHierarchy } from '@/lib/types';
 import { createFolder, getFilesByAccount, getFolderByAccount } from '@/services/fileDrive';
@@ -10,13 +10,14 @@ type Props = {
 };
 
 type FileDriveAction = {
-  type: 'initalize' | 'createFolder' | 'setCurrentFolder' | 'updateFolders';
+  type: 'initalize' | 'createFolder' | 'setCurrentFolder' | 'updateFolders' | 'addFiles';
   payload?: {
     fileDrive?: FileDrive;
     file?: File;
     folder?: Folder;
     currentFolder?: string;
     folders?: Folder[];
+    files?: File[];
   };
 };
 
@@ -48,6 +49,15 @@ const fileDriveReducer = (state: FileDrive, action: FileDriveAction): FileDrive 
         return {
           ...state,
           folders: action.payload.folders,
+        };
+      }
+
+      return state;
+    case 'addFiles':
+      if (action.payload?.files) {
+        return {
+          ...state,
+          files: action.payload.files,
         };
       }
 
@@ -112,7 +122,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
   }
 
   function getFilesByFolderId(folderId: string): File[] {
-    const filesByFolderId: File[] = files().filter((file) => file.folderId === folderId);
+    const filesByFolderId: File[] = getFiles().filter((file) => file.folderId === folderId);
     return filesByFolderId;
   }
 

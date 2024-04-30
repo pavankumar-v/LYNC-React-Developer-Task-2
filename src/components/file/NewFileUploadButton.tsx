@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { DocumentPlusIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 import { Button, GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd';
 import useModal from '@/hooks/useModal';
 import { fileUpload } from '@/services/fileUpload.ts';
+import { File, PinataFile } from '@/lib/interface';
+import { useSDK } from '@metamask/sdk-react-ui';
+import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
+import { createFile } from '@/services/fileDrive';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -10,6 +14,8 @@ const NewFileUploadButton: React.FC = () => {
   const { isModalOpen, showModal, handleOk, handleCancel } = useModal();
   const [file, setFile] = useState<UploadFile | null>();
   const [uploading, setUploading] = useState(false);
+  const { currentFolderId } = useContext(FileDriveContext) as FileDriveContextType;
+  const { account } = useSDK();
 
   const handleUpload = async () => {
     const formData = new FormData();
@@ -17,7 +23,17 @@ const NewFileUploadButton: React.FC = () => {
     setUploading(true);
 
     fileUpload(formData)
-      .then(() => {
+      .then((res: PinataFile) => {
+        console.log(res);
+        const newFile: File = {
+          accountId: account,
+          fileName: file?.fileName || 'Untitled',
+          IpfsHash: res.IpfsHash,
+          folderId: currentFolderId,
+          PinSize: res.PinSize,
+          TimeStamp: res.Timestamp,
+        };
+        createFile(newFile);
         setFile(null);
         message.success('upload successfully.');
       })

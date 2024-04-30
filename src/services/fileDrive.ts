@@ -1,16 +1,5 @@
-import { files, getFolders } from '@/lib/constants';
+import { getFiles, getFolders } from '@/lib/constants';
 import { File, FileDrive, Folder } from '@/lib/interface';
-
-export function getFiles(account: string): FileDrive | null {
-  const filesJsonString = localStorage.getItem(account);
-
-  if (filesJsonString) {
-    const files: FileDrive | null = JSON.parse(filesJsonString);
-    return files;
-  }
-
-  return null;
-}
 
 export function setFiles(acconut: string, fileDrive: FileDrive) {
   localStorage.setItem(acconut, JSON.stringify(fileDrive));
@@ -18,9 +7,13 @@ export function setFiles(acconut: string, fileDrive: FileDrive) {
 
 export function createFolder(folder: Folder): Folder[] {
   const updatedFolders: Folder[] = [...getFolders(), folder];
-  const newFolders = JSON.stringify(JSON.parse(JSON.stringify([...updatedFolders])));
-  localStorage.setItem('folders', newFolders);
+  localStorage.setItem('folders', JSON.stringify([...updatedFolders]));
   return getFolderByAccount(folder.accountId);
+}
+
+export function createFile(file: File) {
+  const newFiles: File[] = [...getFiles(), file];
+  localStorage.setItem('files', JSON.stringify(newFiles));
 }
 
 export function getFolderByAccount(accountId: string) {
@@ -28,14 +21,14 @@ export function getFolderByAccount(accountId: string) {
 }
 
 export function getFilesByAccount(accountId: string) {
-  return files().filter((file: File) => file.accountId === accountId);
+  return getFiles().filter((file: File) => file.accountId === accountId);
 }
 
 export function renameFolder(folderId: string, newName: string) {
   const folders: Folder[] = getFolders();
   const index: number | undefined = folders.findIndex((folder) => folder.id === folderId);
 
-  if (index) {
+  if (index > -1) {
     folders[index]['folderName'] = newName;
   }
 

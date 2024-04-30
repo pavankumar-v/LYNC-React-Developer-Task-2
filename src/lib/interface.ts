@@ -10,7 +10,7 @@ export interface File {
   fileName: string;
   TimeStamp: Date;
   PinSize: number;
-  accountId: string;
+  accountId: string | undefined;
   folderId: string;
 }
 
@@ -21,4 +21,11 @@ export interface Folder {
   parentFolderID: string;
   createdAt: Date;
   files?: File[];
+}
+
+export interface PinataFile {
+  IpfsHash: string;
+  PinSize: number;
+  Timestamp: Date;
+  isDuplicate: boolean;
 }
