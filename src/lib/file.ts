@@ -1,5 +1,6 @@
 import pdfIconPng from '@/assets/images/pdf.png';
 import jpgIconPng from '@/assets/images/jpg.png';
+import unknownIconPng from '@/assets/images/unknown.png';
 
 const re: RegExp = /(?:\.([^.]+))?$/;
 export const getFileExtention = (fileName: string): FileExtentions =>
@@ -13,12 +14,13 @@ export enum FileExtentions {
   DEFAULT = 'default',
 }
 export const supportedFileExtention: string[] = Object.values(FileExtentions);
+export const imageExtentions: string[] = [FileExtentions.JPEG, FileExtentions.JPG, FileExtentions.PNG];
 export const fileIcon: { [key in FileExtentions]: string } = {
   '.pdf': pdfIconPng,
   '.png': jpgIconPng,
   '.jpeg': jpgIconPng,
   '.jpg': jpgIconPng,
-  default: pdfIconPng,
+  default: unknownIconPng,
 };
 
 export const getFileIcon = (fileName: string): string => {
