@@ -17,15 +17,16 @@ export function setFiles(acconut: string, fileDrive: FileDrive) {
 }
 
 export function createFolder(folder: Folder): Folder[] {
-  const updatedFolders: Folder[] = [...folders, folder];
-  localStorage.setItem('folders', JSON.stringify([...updatedFolders]));
+  const updatedFolders: Folder[] = [...folders(), folder];
+  const newFolders = JSON.stringify(JSON.parse(JSON.stringify([...updatedFolders])));
+  localStorage.setItem('folders', newFolders);
   return getFolderByAccount(folder.accountId);
 }
 
 export function getFolderByAccount(accountId: string) {
-  return folders.filter((folder: Folder) => folder.accountId === accountId);
+  return folders().filter((folder: Folder) => folder.accountId === accountId);
 }
 
 export function getFilesByAccount(accountId: string) {
-  return files.filter((file: File) => file.accountId === accountId);
+  return files().filter((file: File) => file.accountId === accountId);
 }

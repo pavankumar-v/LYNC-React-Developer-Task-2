@@ -92,7 +92,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
       return [{ folderId: rootFolderId, label: 'My Drive' }, ...folderHierarchy];
     }
 
-    const folder: Folder | undefined = folders.find((folder) => folder.id === folderId);
+    const folder: Folder | undefined = folders().find((folder) => folder.id === folderId);
     if (folder?.parentFolderID) {
       folderHierarchy = [{ folderId: folder.id, label: folder.folderName }, ...folderHierarchy];
     }
@@ -101,7 +101,7 @@ const FileDriveProvider: React.FC<Props> = ({ children }) => {
   }
 
   function getFilesByFolderId(folderId: string): File[] {
-    const filesByFolderId: File[] = files.filter((file) => file.folderId === folderId);
+    const filesByFolderId: File[] = files().filter((file) => file.folderId === folderId);
     return filesByFolderId;
   }
 

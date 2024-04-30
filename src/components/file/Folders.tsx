@@ -5,10 +5,6 @@ import { FolderIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
-// const currentDir = getFolderByAccount(account).filter(
-//   (folder) => folder.parentFolderID === currentFolderId
-// );
-
 const Folders: React.FC = () => {
   const { fileDrive } = useContext(FileDriveContext) as FileDriveContextType;
   const { folders } = fileDrive;
