@@ -43,6 +43,14 @@ const router = createBrowserRouter([
     element: <MetamaskAuth />,
   },
   {
+    path: '/',
+    element: (
+      <Authenticate>
+        <Dashboard />
+      </Authenticate>
+    ),
+  },
+  {
     path: '/dashboard',
     element: (
       <Authenticate>

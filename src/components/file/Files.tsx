@@ -41,6 +41,7 @@ const Files = () => {
 };
 
 const File: React.FC<{ file: File }> = ({ file }) => {
+  const { setFile } = useContext(FileDriveContext) as FileDriveContextType;
   const url: string = `https://${import.meta.env.VITE_GATEWAY_URL}/ipfs/${file.IpfsHash}`;
   const fileIcon: string = getFileIcon(file.fileName);
 
@@ -49,7 +50,7 @@ const File: React.FC<{ file: File }> = ({ file }) => {
       key: 'rename',
       label: 'Rename',
       onClick: () => {
-        // renameFolder(folder.id, )
+        setFile(file);
       },
     },
     {

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { Folder } from '@/lib/interface';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
@@ -11,9 +11,10 @@ type Props = {
 };
 
 const FolderFormModal: React.FC<Props> = ({ folder, onSubmitCallback, edit = false }) => {
-  console.log(folder);
   const { fileDriveDispatch, getCurrentFolderDir } = useContext(FileDriveContext) as FileDriveContextType;
   const [form] = Form.useForm();
+
+  console.log(folder);
 
   function handleOnSubmit(values: { folderName: string }) {
     if (edit) {
@@ -27,6 +28,13 @@ const FolderFormModal: React.FC<Props> = ({ folder, onSubmitCallback, edit = fal
     message.success(`Folder ${edit ? 'updated' : 'created'} successfully`);
   }
 
+  useEffect(() => {
+    form.setFieldsValue({
+      folderName: folder.folderName,
+    });
+    return form.resetFields();
+  }, []);
+
   return (
     <Form
       form={form}
@@ -35,13 +43,12 @@ const FolderFormModal: React.FC<Props> = ({ folder, onSubmitCallback, edit = fal
       labelAlign="left"
       labelWrap
       wrapperCol={{ flex: 1 }}
-      colon={false}
       style={{ maxWidth: 600 }}
-      initialValues={folder}
+      initialValues={{ ...folder }}
       onFinish={handleOnSubmit}
     >
       <Form.Item name="folderName" rules={[{ required: true }]}>
-        <Input placeholder="Folder Name" autoFocus />
+        <Input placeholder="Folder Name" autoFocus value={folder.folderName} />
       </Form.Item>
 
       <Form.Item>

@@ -47,7 +47,6 @@ const Folder: React.FC<{ folder: Folder }> = ({ folder }) => {
       key: 'rename',
       label: 'Rename',
       onClick: () => {
-        console.log('first');
         setFolder(folder);
       },
     },

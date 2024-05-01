@@ -47,6 +47,18 @@ export function deleteFolder(folderId: string) {
   return folders;
 }
 
+export function renameFile(fileId: string, newName: string) {
+  const files: File[] = getFiles();
+  const index: number | undefined = files.findIndex((file) => file.IpfsHash === fileId);
+
+  if (index > -1) {
+    files[index]['fileName'] = newName;
+    localStorage.setItem('files', JSON.stringify(files));
+  }
+
+  return files;
+}
+
 export function deleteFile(fileId: string) {
   const files: File[] = getFiles();
   const index: number | undefined = files.findIndex((file) => file.IpfsHash === fileId);
