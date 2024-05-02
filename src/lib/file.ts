@@ -61,18 +61,20 @@ export const genFileTree = (folderId: string, accountId: string): FolderTree => 
   return folderTree;
 };
 
-// const fileTree: FolderTree = genFileTree(rootFolderId, acconutId);
 export const genFileTreeMenu = (fileTree: FolderTree, setCurrentFolder: (folderId: string) => void): MenuItem => {
   const items: MenuItem = {
     key: fileTree.folderId,
     label: fileTree.name,
-    onClick: (e) => {
-      e.domEvent.preventDefault();
-      e.domEvent.stopPropagation();
-      setCurrentFolder(fileTree.folderId);
-    },
     children: [
-      ...fileTree.files.map((file): MenuItem => ({ key: file.IpfsHash, label: file.fileName })),
+      ...fileTree.files.map(
+        (file): MenuItem => ({
+          key: file.IpfsHash,
+          label: file.fileName,
+          onClick: () => {
+            setCurrentFolder(fileTree.folderId);
+          },
+        })
+      ),
       ...fileTree.folderTree.map((folderTree): MenuItem => genFileTreeMenu(folderTree, setCurrentFolder)),
     ],
   };

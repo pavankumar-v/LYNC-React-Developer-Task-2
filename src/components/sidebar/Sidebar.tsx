@@ -25,7 +25,6 @@ const Sidebar: React.FC = () => {
   }, [fileDrive]);
 
   function changeFolderPath(folderId: string) {
-    console.log(folderId);
     navigate(`/dashboard/${folderId}`);
     setCurrentFolder(folderId);
   }
