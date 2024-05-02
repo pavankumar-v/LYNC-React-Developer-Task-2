@@ -13,7 +13,11 @@ const MetamarkUIButton: React.FC = () => {
     return <div>{account && `${account}`}</div>;
   }
 
-  return <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>;
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+    </div>
+  );
 };
 
 export default MetamarkUIButton;

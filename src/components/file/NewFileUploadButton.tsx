@@ -7,6 +7,7 @@ import { File, PinataFile } from '@/lib/interface';
 import { useSDK } from '@metamask/sdk-react-ui';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 import { createFile } from '@/services/fileDrive';
+import { nanoid } from 'nanoid';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -27,6 +28,7 @@ const NewFileUploadButton: React.FC = () => {
     fileUpload(formData)
       .then((res: PinataFile) => {
         const newFile: File = {
+          id: nanoid(14),
           accountId: account,
           fileName: file?.name || 'Untitled',
           IpfsHash: res.IpfsHash,
@@ -34,10 +36,13 @@ const NewFileUploadButton: React.FC = () => {
           PinSize: res.PinSize,
           TimeStamp: res.Timestamp,
         };
-        createFile(newFile);
-        fileDriveDispatch({ type: 'addFiles', payload: { files: getCurrentDirFiles() } });
-        setFile(null);
-        message.success('upload successfully.');
+        if (createFile(newFile)) {
+          fileDriveDispatch({ type: 'addFiles', payload: { files: getCurrentDirFiles() } });
+          setFile(null);
+          message.success('upload successfully.');
+        } else {
+          message.error('File with same name exists');
+        }
       })
       .catch(() => {
         message.error('upload failed.');
@@ -57,6 +62,7 @@ const NewFileUploadButton: React.FC = () => {
 
       return false;
     },
+    maxCount: 1,
   };
 
   return (
