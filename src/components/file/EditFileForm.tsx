@@ -15,7 +15,7 @@ const EditFileForm: React.FC<Props> = ({ file, onSubmitCallback, edit = true }) 
   const [form] = Form.useForm();
 
   function handleOnSubmit(values: { fileName: string }) {
-    renameFile(file.IpfsHash, values.fileName);
+    renameFile(file.id, values.fileName);
     fileDriveDispatch({ type: 'addFiles', payload: { files: getCurrentDirFiles() } });
     form.resetFields();
     message.success(`Folder ${edit ? 'updated' : 'created'} successfully`);

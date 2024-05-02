@@ -6,6 +6,7 @@ export interface FileDrive {
 }
 
 export interface File {
+  id: string;
   IpfsHash: string;
   fileName: string;
   TimeStamp: Date;
@@ -24,6 +25,7 @@ export interface Folder {
 }
 
 export interface PinataFile {
+  id: string;
   IpfsHash: string;
   PinSize: number;
   Timestamp: Date;

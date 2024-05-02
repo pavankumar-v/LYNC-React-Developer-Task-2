@@ -11,9 +11,18 @@ export function createFolder(folder: Folder): Folder[] {
   return getFolderByAccount(folder.accountId || '');
 }
 
-export function createFile(file: File) {
-  const newFiles: File[] = [...getFiles(), file];
-  localStorage.setItem('files', JSON.stringify(newFiles));
+export function createFile(file: File): boolean {
+  const fileInDb: File | undefined = getFiles().find(
+    (extFile) =>
+      extFile.fileName === file.fileName && extFile.accountId === file.accountId && extFile.folderId === file.folderId
+  );
+  if (fileInDb === undefined) {
+    const newFiles: File[] = [...getFiles(), file];
+    localStorage.setItem('files', JSON.stringify(newFiles));
+    return true;
+  }
+
+  return false;
 }
 
 export function getFolderByAccount(accountId: string) {
@@ -49,7 +58,7 @@ export function deleteFolder(folderId: string) {
 
 export function renameFile(fileId: string, newName: string) {
   const files: File[] = getFiles();
-  const index: number | undefined = files.findIndex((file) => file.IpfsHash === fileId);
+  const index: number | undefined = files.findIndex((file) => file.id === fileId);
 
   if (index > -1) {
     files[index]['fileName'] = newName;
@@ -61,7 +70,7 @@ export function renameFile(fileId: string, newName: string) {
 
 export function deleteFile(fileId: string) {
   const files: File[] = getFiles();
-  const index: number | undefined = files.findIndex((file) => file.IpfsHash === fileId);
+  const index: number | undefined = files.findIndex((file) => file.id === fileId);
 
   if (index > -1) {
     files.splice(index, 1);

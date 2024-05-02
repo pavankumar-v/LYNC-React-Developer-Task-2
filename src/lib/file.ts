@@ -68,7 +68,7 @@ export const genFileTreeMenu = (fileTree: FolderTree, setCurrentFolder: (folderI
     children: [
       ...fileTree.files.map(
         (file): MenuItem => ({
-          key: file.IpfsHash,
+          key: file.id,
           label: file.fileName,
           onClick: () => {
             setCurrentFolder(fileTree.folderId);

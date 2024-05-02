@@ -55,7 +55,7 @@ const File: React.FC<{ file: File }> = ({ file }) => {
     },
     {
       key: 'delete',
-      label: <DeleteFileButton fileId={file.IpfsHash} />,
+      label: <DeleteFileButton fileId={file.id} />,
       danger: true,
     },
   ];
