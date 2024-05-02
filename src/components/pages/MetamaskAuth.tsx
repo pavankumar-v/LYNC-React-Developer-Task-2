@@ -1,17 +1,19 @@
 import { MetaMaskButton, useSDK } from '@metamask/sdk-react-ui';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageLoading from './PageLoading';
+import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
 
 const MetamaskAuth: React.FC = () => {
   const { connected, account, connecting } = useSDK();
+  const { currentFolderId } = useContext(FileDriveContext) as FileDriveContextType;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (connected && account) {
-      navigate('/dashboard');
+      navigate(`/dashboard/${currentFolderId}`);
     }
-  }, [connected, account, navigate]);
+  }, [account, connected]);
 
   if (connecting) {
     return <PageLoading />;
