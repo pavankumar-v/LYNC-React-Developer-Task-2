@@ -62,6 +62,7 @@ const NewFileUploadButton: React.FC = () => {
 
       return false;
     },
+    maxCount: 1,
   };
 
   return (
