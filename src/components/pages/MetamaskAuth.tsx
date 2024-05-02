@@ -20,8 +20,14 @@ const MetamaskAuth: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full m-auto">
-      <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+    <div className="w-full h-full flex justify-center items-center">
+      <div className="text-center">
+        <h2 className="text-xl font-bold text-center mb-3">
+          Please Connect Your MetaMask Wallet To Continue to Dashboard
+        </h2>
+        <p className="text-center">Open your MetaMask Extensions</p>
+        <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+      </div>
     </div>
   );
 };
