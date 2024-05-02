@@ -1,30 +1,41 @@
-# React + TypeScript + Vite
+# File Drive
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Manage Your File in IPFs ( Inter Planetory FileSystem ) like Google Drive in web 3 technology
 
-Currently, two official plugins are available:
+# Instructions to Run Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+install all packages
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-};
+```
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+set development variables
+
+```
+VITE_INFURA_API_KEY=""
+VITE_PINATA_JWT=""
+VITE_GATEWAY_URL=""
+```
+
+Where to get the secrets?
+
+create infura api key [link](https://docs.infura.io/dashboard/create-api)
+
+setup pinata variables [link to docs](https://docs.pinata.cloud/quickstart/react#create-an-api-key-and-get-gateway-url)
+
+### Run Project
+
+```
+npm run dev
+```
+
+# Features 💡
+
+1. Manage Folders, with nested tress
+2. Manage Files any type
+3. Rename Folders and Files
+4. Delete Folders and Files
+5. access files and folders from sidebar
+6. MetaMask web3 authentication
+7. Preview Images and Icons of file type
