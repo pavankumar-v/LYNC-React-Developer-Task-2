@@ -29,3 +29,10 @@ export interface PinataFile {
   Timestamp: Date;
   isDuplicate: boolean;
 }
+
+export interface FolderTree {
+  folderId: string;
+  name: string;
+  files: File[];
+  folderTree: FolderTree[];
+}

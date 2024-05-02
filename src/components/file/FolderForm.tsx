@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { Folder } from '@/lib/interface';
 import { FileDriveContext, FileDriveContextType } from '@/contexts/FileDriveProvider';
@@ -14,8 +14,6 @@ const FolderFormModal: React.FC<Props> = ({ folder, onSubmitCallback, edit = fal
   const { fileDriveDispatch, getCurrentFolderDir } = useContext(FileDriveContext) as FileDriveContextType;
   const [form] = Form.useForm();
 
-  console.log(folder);
-
   function handleOnSubmit(values: { folderName: string }) {
     if (edit) {
       renameFolder(folder.id, values.folderName);
@@ -27,13 +25,6 @@ const FolderFormModal: React.FC<Props> = ({ folder, onSubmitCallback, edit = fal
     form.resetFields();
     message.success(`Folder ${edit ? 'updated' : 'created'} successfully`);
   }
-
-  useEffect(() => {
-    form.setFieldsValue({
-      folderName: folder.folderName,
-    });
-    return form.resetFields();
-  }, []);
 
   return (
     <Form
