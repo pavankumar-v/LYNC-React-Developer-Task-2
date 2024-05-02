@@ -44,6 +44,7 @@ const NewFileUploadButton: React.FC = () => {
       })
       .finally(() => {
         setUploading(false);
+        handleOk();
       });
   };
 
